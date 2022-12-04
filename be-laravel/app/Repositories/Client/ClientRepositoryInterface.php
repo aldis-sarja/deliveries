@@ -10,6 +10,7 @@ interface ClientRepositoryInterface
 {
     public function getAllClients(): Collection;
     public function getClientById(int $id): Client;
+    public function getClientAddresses(int $id): Collection;
     public function getClientsByDifferentDeliveries(): Collection;
     public function getClientsByFilter(array $filter): Collection;
 }

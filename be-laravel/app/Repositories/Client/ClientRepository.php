@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Client;
 
+use App\Models\Address;
 use App\Models\Client;
 use App\Models\Delivery;
 use Illuminate\Database\Eloquent\Collection;
@@ -15,9 +16,13 @@ class ClientRepository implements ClientRepositoryInterface
 
     public function getClientById(int $id): Client
     {
-        return Client::with('addresses.deliveries.deliveryLines')
-            ->with('addresses.deliveries.route')
+        return Client::with(['addresses.deliveries.deliveryLines', 'addresses.deliveries.route'])
             ->findOrFail($id);
+    }
+
+    public function getClientAddresses(int $id): Collection
+    {
+        return Address::where('client_id', $id)->get();
     }
 
     public function getClientsByDifferentDeliveries(): Collection
@@ -50,7 +55,9 @@ class ClientRepository implements ClientRepositoryInterface
 
     public function getClientsByFilter(array $filter): Collection
     {
-        return $this->noLiquidDeliveries();
+        if (in_array('noliquid', $filter)) {
+            return $this->noLiquidDeliveries();
+        }
     }
 
     private function noLiquidDeliveries(): Collection
@@ -68,6 +75,6 @@ class ClientRepository implements ClientRepositoryInterface
                 }
             }
             return false;
-        });
+        })->values(); // Normalise array indexes
     }
 }

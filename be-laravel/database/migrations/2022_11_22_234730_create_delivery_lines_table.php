@@ -18,7 +18,7 @@ return new class extends Migration
             $table->bigInteger('delivery_id');
             $table->string('item');
             $table->integer('price');
-            $table->integer('qty');
+            $table->decimal('qty', 6, 3);
             $table->timestamps();
         });
     }

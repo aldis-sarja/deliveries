@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\v1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ClientRequest;
 use App\Services\Client\GetAllClientsService;
+use App\Services\Client\GetClientAddressesService;
 use App\Services\Client\GetClientByIdService;
 use App\Services\Client\GetClientsByDifferentDeliveriesService;
 use App\Services\Client\GetClientsByFilterService;
@@ -16,18 +17,21 @@ class ClientController extends Controller
     private GetClientByIdService $getClientByIdService;
     private GetClientsByDifferentDeliveriesService $getClientsByDifferentDeliveriesService;
     private GetClientsByFilterService $getClientsByFilterService;
+    private GetClientAddressesService $getClientAddressesService;
 
     public function __construct(
         GetAllClientsService                   $getAllClientsService,
         GetClientByIdService                   $getClientByIdService,
         GetClientsByDifferentDeliveriesService $getClientsByDifferentDeliveriesService,
-        GetClientsByFilterService              $getClientsByFilterService
+        GetClientsByFilterService              $getClientsByFilterService,
+        GetClientAddressesService              $getClientAddressesService
     )
     {
         $this->getAllClientsService = $getAllClientsService;
         $this->getClientByIdService = $getClientByIdService;
         $this->getClientsByDifferentDeliveriesService = $getClientsByDifferentDeliveriesService;
         $this->getClientsByFilterService = $getClientsByFilterService;
+        $this->getClientAddressesService = $getClientAddressesService;
     }
 
     public function index(): JsonResponse
@@ -52,6 +56,17 @@ class ClientController extends Controller
         }
     }
 
+    public function getAddresses(int $id): JsonResponse
+    {
+        try {
+            return cache()->remember("Client:Addresses:" . $id, self::CACHE_TIME, function () use ($id) {
+                return response()->json($this->getClientAddressesService->execute($id));
+            });
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 404);
+        }
+    }
+
     public function getDifferentDeliveries(): JsonResponse
     {
         try {
@@ -67,7 +82,9 @@ class ClientController extends Controller
 
     public function getClientsByFilter(ClientRequest $request): JsonResponse
     {
-        $filter = $request->get('noliquid') ? ['noliquid' => $request->get('noliquid')]: null;
+        if ($request->get('noliquid')) {
+            $filter[] = 'noliquid';
+        }
 
         if ($filter) {
             try {

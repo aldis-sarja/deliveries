@@ -12,7 +12,19 @@ use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
-    private array $products = ['Maize', 'Piens', 'Ķirbis', 'Dzeramais ūdens',  'Slotaskāts', 'Mazuts', 'Slēpes ar abordāžas āķi', 'Lietusūdens', 'Gludeklis ar magnētiskās lentas piedziņu'];
+    private array $products = [
+        'Maize',
+        'Piens',
+        'Ķirbis',
+        'Dzeramais ūdens',
+        'Slotaskāts',
+        'Mazuts',
+        'Slēpes ar abordāžas āķi',
+        'Lietusūdens',
+        'Gludeklis ar magnētiskās lentas piedziņu',
+        'Krāsa'
+    ];
+
     /**
      * Seed the application's database.
      *
@@ -43,7 +55,7 @@ class DatabaseSeeder extends Seeder
 
             $delivery = \App\Models\Delivery::factory()->create([
                 'route_id' => $route->id,
-                'address_id' => $addresses->get(random_int(0, $addresses->count()-1))->id,
+                'address_id' => $addresses->get(random_int(0, $addresses->count() - 1))->id,
                 'type' => $type,
                 'status' => random_int(1, 3)
             ]);
