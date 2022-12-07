@@ -1,7 +1,7 @@
 # Deliveries app backend
 
 Built with PHP, composer, Laravel 9
-This is backend part of the app. For frontend look to []
+This is backend part of the app. For frontend look to [Deliveries frontend](https://github.com/aldis-sarja/deliveries-frontend.git)
 
 ## Installation
 
@@ -66,6 +66,8 @@ Install and run frontend part.
 }
 ```
 
+---
+
 -   `api/v1/clients/{id}/addresses` List of addresses for particular client.
 
 ```
@@ -77,6 +79,8 @@ Install and run frontend part.
     "updated_at":
     }
 ```
+
+---
 
 -   `api/v1/clients/different-deliveries` List of clients with deliveries, that contains both product types (solid and liquid).
 
@@ -122,6 +126,8 @@ Delivery status:
 -   2: finished
 -   3: canceled
 
+---
+
 -   `api/v1/clients/no-liquid-deliveries` List of clients who never received liquid products. The same output as for `different-deliveries`
 
 -   `api/v1/deliveries/last` List of addresses with last delivery
@@ -135,6 +141,8 @@ Delivery status:
     "sum":
 }
 ```
+
+---
 
 -   `api/v1/clients/{id}` All info of client with id
 
