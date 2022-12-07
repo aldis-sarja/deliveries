@@ -130,6 +130,8 @@ Delivery status:
 
 -   `api/v1/clients/no-liquid-deliveries` List of clients who never received liquid products. The same output as for `different-deliveries`
 
+---
+
 -   `api/v1/deliveries/last` List of addresses with last delivery
 
 ```
